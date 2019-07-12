@@ -1,18 +1,20 @@
 /**
  * 
  */
-package com.progesco.client.bundles.schoolyear.beans;
+package com.progesco.schoolYear.model;
 
 /**
  * @author emile
  *
  */
-public class SchoolYear {
+public class SemesterModel {
 	private long id;
 	private String label;
+	private Integer rankid;
 	private java.sql.Date startDate;
 	private java.sql.Date endDate;
-	private boolean isActive;
+	private int level;
+	private long schoolyearId;
 	
 	/**
 	 * @return the id
@@ -40,6 +42,20 @@ public class SchoolYear {
 	 */
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	
+	/**
+	 * @return the rankid
+	 */
+	public Integer getRankid() {
+		return rankid;
+	}
+	
+	/**
+	 * @param rankid the rankid to set
+	 */
+	public void setRankid(Integer rankid) {
+		this.rankid = rankid;
 	}
 	
 	/**
@@ -71,17 +87,32 @@ public class SchoolYear {
 	}
 	
 	/**
-	 * @return the isActive
+	 * @return the level
 	 */
-	public boolean isActive() {
-		return isActive;
+	public int getLevel() {
+		return level;
 	}
 	
 	/**
-	 * @param isActive the isActive to set
+	 * @param level the level to set
 	 */
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setLevel(int level) {
+		this.level = level;
 	}
+	
+	/**
+	 * @return the schoolyearId
+	 */
+	public long getSchoolyearId() {
+		return schoolyearId;
+	}
+	
+	/**
+	 * @param schoolyearId the schoolyearId to set
+	 */
+	public void setSchoolyearId(long schoolyearId) {
+		this.schoolyearId = schoolyearId;
+	}
+	
 	
 }

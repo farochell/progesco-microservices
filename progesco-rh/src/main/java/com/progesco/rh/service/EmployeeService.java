@@ -3,6 +3,8 @@
  */
 package com.progesco.rh.service;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class EmployeeService {
 	 * @param employee
 	 * @return
 	 */
-	public EmployeeModel buildEmployeeModel(Employee employee) {
+	private EmployeeModel buildEmployeeModel(Employee employee) {
 		EmployeeModel employeeModel = new EmployeeModel();
 		employeeModel.setId(employee.getId());
 		employeeModel.setBirthDate(employee.getBirthDate());
@@ -47,6 +49,30 @@ public class EmployeeService {
 	}
 	
 	/**
+	 * Build employee
+	 * @param employeeModel
+	 * @return
+	 */
+	private Employee buildEmployee(EmployeeModel employeeModel) {
+		Employee employee = new Employee();
+		employee.setId(employeeModel.getId());
+		employee.setBirthDate(employeeModel.getBirthDate());
+		employee.setEmail(employeeModel.getEmail());
+		employee.setFirstName(employeeModel.getFirstName());
+		employee.setLastName(employeeModel.getLastName());
+		employee.setGender(employeeModel.getGender());
+		employee.setMainPhone(employeeModel.getMainPhone());
+		employee.setMaritalStatus(employeeModel.getMaritalStatus());
+		employee.setNationality(employeeModel.getNationality());
+		employee.setNbChild(employeeModel.getNbChild());
+		employee.setPlaceOfBirth(employeeModel.getPlaceOfBirth());
+		employee.setRegistrationNumber(employeeModel.getRegistrationNumber());
+		employee.setSecondPhone(employeeModel.getSecondPhone());
+		
+		return employee;
+	}
+	
+	/**
 	 * Return all employees
 	 * @return
 	 */
@@ -58,5 +84,37 @@ public class EmployeeService {
 		}
 		
 		return employeeModels;
+	}
+	
+	/**
+	 * Add a new employee
+	 * @param employeeModel
+	 * @return
+	 */
+	public EmployeeModel addEmployee(EmployeeModel employeeModel) {
+		Employee employee = buildEmployee(employeeModel);
+		employeeRepository.save(employee);
+		String registrationNumber = buildRegistrationNumber(employee.getLastName(), employee.getFirstName(), employee.getBirthDate(), employee.getId());
+		employee.setRegistrationNumber(registrationNumber);
+		employeeRepository.save(employee);
+		employeeModel.setId(employee.getId());
+		
+		return employeeModel;
+	}
+	
+	/**
+	 * Build registration number
+	 * @param lastname
+	 * @param firstname
+	 * @param birthDate
+	 * @param Id
+	 * @return
+	 */
+	private String buildRegistrationNumber(String lastname, String firstname, Date birthDate, Long Id) {
+		String registrationNumber = "";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+		registrationNumber = "SA-" + lastname.substring(0,2).toUpperCase() + firstname.substring(0,2).toUpperCase() + simpleDateFormat.format(birthDate) + "-" + Id;
+		
+		return registrationNumber;
 	}
 }
