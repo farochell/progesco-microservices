@@ -39,7 +39,7 @@ public class LevelController {
 		return levelService.getAllLevels();
 	}
 	
-	@GetMapping("/level/{id}")
+	@GetMapping("/levels/{id}")
 	public Resource<Level> retrieveSchoolyear(@PathVariable long id) {
 		Optional<Level> level = levelService.findLevel(id);
 
@@ -55,7 +55,7 @@ public class LevelController {
 		return resource;
 	}
 	
-	@PostMapping(value = "/level")
+	@PostMapping(value = "/levels")
 	public ResponseEntity<Level> addLevel(@RequestBody Level level) {
 		Level resource = levelService.addLevel(level);
 
@@ -63,7 +63,7 @@ public class LevelController {
 	}
 	
 	
-	@PutMapping(value = "/level")
+	@PutMapping(value = "/levels")
 	public ResponseEntity<Level> updateLevel(@RequestBody Level level) {
 		Level resource = levelService.updateLevel(level);
 

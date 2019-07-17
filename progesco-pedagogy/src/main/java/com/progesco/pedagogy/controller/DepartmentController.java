@@ -39,7 +39,7 @@ public class DepartmentController {
 		return departmentService.getAllDepartments();
 	}
 	
-	@GetMapping("/department/{id}")
+	@GetMapping("/departments/{id}")
 	public Resource<Department> retrieveSchoolyear(@PathVariable long id) {
 		Optional<Department> department = departmentService.findDepartment(id);
 
@@ -55,14 +55,14 @@ public class DepartmentController {
 		return resource;
 	}
 	
-	@PostMapping(value = "/department")
+	@PostMapping(value = "/departments")
 	public ResponseEntity<Department> addDepartment(@RequestBody Department department) {
 		Department resource = departmentService.addDepartment(department);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
-	@PutMapping(value = "/department")
+	@PutMapping(value = "/departments")
 	public ResponseEntity<Department> updateDepartment(@RequestBody Department department) {
 		Department resource = departmentService.updateDepartment(department);
 

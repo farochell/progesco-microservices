@@ -30,7 +30,7 @@ public class CourseController {
 		return courseService.getAllCourses();
 	}
 	
-	@GetMapping("/course/{id}")
+	@GetMapping("/courses/{id}")
 	public Resource<CourseModel> retrieveCourse(@PathVariable long id) {
 		CourseModel course = courseService.findCourse(id);
 
@@ -43,14 +43,14 @@ public class CourseController {
 		return resource;
 	}
 	
-	@PostMapping(value = "/course")
+	@PostMapping(value = "/courses")
 	public ResponseEntity<CourseModel> addCourse(@RequestBody CourseModel courseModel) {
 		CourseModel resource = courseService.addCourse(courseModel);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
-	@PutMapping(value = "/course")
+	@PutMapping(value = "/courses")
 	public ResponseEntity<CourseModel> updateCourse(@RequestBody CourseModel courseModel) {
 		CourseModel resource = courseService.updateCourse(courseModel);
 

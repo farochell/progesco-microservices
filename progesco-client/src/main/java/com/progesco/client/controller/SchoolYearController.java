@@ -42,19 +42,19 @@ public class SchoolYearController {
 		 return schoolyears;
 	 }
 	 
-	 @GetMapping(value = "/schoolyear/{id}")
+	 @GetMapping(value = "/schoolyears/{id}")
 	 Resource<SchoolYear> retrieveSchoolyear(@PathVariable("id") long id) {
 		 Resource<SchoolYear> resource = schoolYearProxy.retrieveSchoolyear(id);
 		 return resource;
 	 }
 	 
-	 @GetMapping(value = "/schoolyear/activeyear")
+	 @GetMapping(value = "/schoolyears/activeyear")
 	 public SchoolYear retrieveActiveSchoolYear() {
 		 SchoolYear resource = schoolYearProxy.retrieveActiveSchoolYear();
 		 return resource;
 	 };
 	 
-	 @PostMapping(value="/schoolyear")
+	 @PostMapping(value="/schoolyears")
 	 ResponseEntity<SchoolYear> addSchoolyear(@RequestBody SchoolYear schoolYear) {
 		 SchoolYear resource = schoolYearProxy.addSchoolyear(schoolYear);
 		 
@@ -65,7 +65,7 @@ public class SchoolYearController {
 		
 	 }
 	 
-	 @PutMapping(value="/schoolyear/status/{id}/{status}")
+	 @PutMapping(value="/schoolyears/status/{id}/{status}")
 	 ResponseEntity<SchoolYear> updateSchoolyear(@PathVariable("id") long id, @PathVariable("status") Integer status) {
 		 SchoolYear resource = schoolYearProxy.updateStatus(id, status);
 		 

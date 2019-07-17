@@ -39,7 +39,7 @@ public class SpecialityController {
 		return specialityService.getAllSpecialities();
 	}
 	
-	@GetMapping("/speciality/{id}")
+	@GetMapping("/specialities/{id}")
 	public Resource<Speciality> retrieveSpeciality(@PathVariable long id) {
 		Optional<Speciality> speciality = specialityService.findSpeciality(id);
 
@@ -55,14 +55,14 @@ public class SpecialityController {
 		return resource;
 	}
 	
-	@PostMapping(value = "/speciality")
+	@PostMapping(value = "/specialities")
 	public ResponseEntity<Speciality> addSpeciality(@RequestBody Speciality speciality) {
 		Speciality resource = specialityService.addSpeciality(speciality);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
-	@PutMapping(value = "/speciality")
+	@PutMapping(value = "/specialities")
 	public ResponseEntity<Speciality> updateSpeciality(@RequestBody Speciality speciality) {
 		Speciality resource = specialityService.updateSpeciality(speciality);
 

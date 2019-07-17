@@ -37,7 +37,7 @@ public class ClassroomController {
 		return classroomService.getAllClassrooms();
 	}
 	
-	@GetMapping("/classroom/{id}")
+	@GetMapping("/classrooms/{id}")
 	public Resource<ClassroomModel> retrieveClassroom(@PathVariable long id) {
 		ClassroomModel course = classroomService.findClassroom(id);
 
@@ -50,14 +50,14 @@ public class ClassroomController {
 		return resource;
 	}
 	
-	@PostMapping(value = "/classroom")
+	@PostMapping(value = "/classrooms")
 	public ResponseEntity<ClassroomModel> addClassroom(@RequestBody ClassroomModel courseModel) {
 		ClassroomModel resource = classroomService.addClassroom(courseModel);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
-	@PutMapping(value = "/classroom")
+	@PutMapping(value = "/classrooms")
 	public ResponseEntity<ClassroomModel> updateClassroom(@RequestBody ClassroomModel courseModel) {
 		ClassroomModel resource = classroomService.updateClassroom(courseModel);
 

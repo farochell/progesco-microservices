@@ -3,6 +3,8 @@
  */
 package com.progesco.student.entity;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 /**
  * @author emile
@@ -41,16 +43,16 @@ public class Student {
 	@Column(name="place_of_birth", nullable=false, length=100)
 	private String placeOfBirth;
 	
-	@Column(name="registration_number", nullable=true, length=10)
+	@Column(name="registration_number", nullable=true, length=20)
 	private String registrationNumber;
 	
 	@Column(name="email", nullable=true, length=100)
 	private String email;
 	
-	@Column(name="main_phone", nullable=true, length=10)
+	@Column(name="main_phone", nullable=true, length=20)
 	private String mainPhone;
 	
-	@Column(name="second_phone", nullable=true, length=10)
+	@Column(name="second_phone", nullable=true, length=20)
 	private String secondPhone;
 	
 	@Column(name="father_lastname", nullable=false, length=50)
@@ -71,7 +73,7 @@ public class Student {
 	@Column(name="mother_profession", nullable=false, length=50)
 	private String motherProfession;
 	
-	@Column(name="marital_status", nullable=false, length=10)
+	@Column(name="marital_status", nullable=false, length=20)
 	private String maritalStatus;
 	
 	@Column(name="gender", nullable=false, length=2)
@@ -83,10 +85,10 @@ public class Student {
 	@Column(name="guardian_firstname", nullable=false, length=50)
 	private String guardianFirstname;
 	
-	@Column(name="guardian_main_phone", nullable=false, length=10)
+	@Column(name="guardian_main_phone", nullable=false, length=20)
 	private String guardianMainPhone;
 	
-	@Column(name="guardian_second_phone", nullable=false, length=10)
+	@Column(name="guardian_second_phone", nullable=true, length=20)
 	private String guardianSecondPhone;
 	
 	@Column(name="guardian_address", nullable=false, length=255)
@@ -502,6 +504,10 @@ public class Student {
 	 */
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+	
+	public Student() {
+		this.createdAt = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 	}
 
 	

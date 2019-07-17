@@ -26,12 +26,7 @@ import com.progesco.client.pedagogy.beans.Department;
 import com.progesco.client.pedagogy.beans.Level;
 import com.progesco.client.pedagogy.beans.Program;
 import com.progesco.client.pedagogy.beans.Speciality;
-import com.progesco.client.pedagogy.proxies.ClassroomProxy;
-import com.progesco.client.pedagogy.proxies.CourseProxy;
-import com.progesco.client.pedagogy.proxies.DepartmentProxy;
-import com.progesco.client.pedagogy.proxies.LevelProxy;
-import com.progesco.client.pedagogy.proxies.ProgramProxy;
-import com.progesco.client.pedagogy.proxies.SpecialityProxy;
+import com.progesco.client.pedagogy.proxies.PedagogyProxy;
 
 /**
  * @author emile
@@ -42,97 +37,82 @@ import com.progesco.client.pedagogy.proxies.SpecialityProxy;
 @RequestMapping("/api")
 public class PedagogyController {
 	@Autowired
-	CourseProxy courseProxy;
-	
-	@Autowired
-	DepartmentProxy departmentProxy;
-	
-	@Autowired
-	LevelProxy levelProxy;
-	
-	@Autowired
-	ProgramProxy programProxy;
-	
-	@Autowired
-	SpecialityProxy specialityProxy;
-	
-	@Autowired
-	ClassroomProxy classroomProxy;
+	PedagogyProxy pedagogyProxy;
 
 	@GetMapping("/courses")
 	public @ResponseBody Iterable<Course> getCourses() {
-		List<Course> courses = courseProxy.getAllCourses();
+		List<Course> courses = pedagogyProxy.getAllCourses();
 
 		return courses;
 	}
 	
 	@GetMapping("/departments")
 	public @ResponseBody Iterable<Department> getDepartments() {
-		List<Department> departments = departmentProxy.getAllDepartments();
+		List<Department> departments = pedagogyProxy.getAllDepartments();
 
 		return departments;
 	}
 	
 	@GetMapping("/levels")
 	public @ResponseBody Iterable<Level> getLevels() {
-		List<Level> levels = levelProxy.getAllLevels();
+		List<Level> levels = pedagogyProxy.getAllLevels();
 
 		return levels;
 	}
 	
 	@GetMapping("/programs")
 	public @ResponseBody Iterable<Program> getPrograms() {
-		List<Program> programs = programProxy.getAllPrograms();
+		List<Program> programs = pedagogyProxy.getAllPrograms();
 
 		return programs;
 	}
 	
 	@GetMapping("/specialities")
 	public @ResponseBody Iterable<Speciality> getSpecialities() {
-		List<Speciality> specialities = specialityProxy.getAllSpecialities();
+		List<Speciality> specialities = pedagogyProxy.getAllSpecialities();
 
 		return specialities;
 	}
 
-	@GetMapping(value = "/course/{id}")
+	@GetMapping(value = "/courses/{id}")
 	Resource<Course> retrieveCourse(@PathVariable("id") long id) {
-		Resource<Course> resource = courseProxy.findCourse(id);
+		Resource<Course> resource = pedagogyProxy.findCourse(id);
 		return resource;
 	}
 	
-	@GetMapping(value = "/department/{id}")
+	@GetMapping(value = "/departments/{id}")
 	Resource<Department> retrieveDepartment(@PathVariable("id") long id) {
-		Resource<Department> resource = departmentProxy.findDepartment(id);
+		Resource<Department> resource = pedagogyProxy.findDepartment(id);
 		return resource;
 	}
 	
-	@GetMapping(value = "/level/{id}")
+	@GetMapping(value = "/levels/{id}")
 	Resource<Level> retrieveLevel(@PathVariable("id") long id) {
-		Resource<Level> resource = levelProxy.findLevel(id);
+		Resource<Level> resource = pedagogyProxy.findLevel(id);
 		return resource;
 	}
 	
-	@GetMapping(value = "/program/{id}")
+	@GetMapping(value = "/programs/{id}")
 	Resource<Program> retrieveProgram(@PathVariable("id") long id) {
-		Resource<Program> resource = programProxy.findProgram(id);
+		Resource<Program> resource = pedagogyProxy.findProgram(id);
 		return resource;
 	}
 	
-	@GetMapping(value = "/speciality/{id}")
+	@GetMapping(value = "/specialities/{id}")
 	Resource<Speciality> retrieveSpeciality(@PathVariable("id") long id) {
-		Resource<Speciality> resource = specialityProxy.findSpeciality(id);
+		Resource<Speciality> resource = pedagogyProxy.findSpeciality(id);
 		return resource;
 	}
 	
-	@GetMapping(value = "/classroom/{id}")
+	@GetMapping(value = "/classrooms/{id}")
 	Resource<Classroom> retrieveClassroom(@PathVariable("id") long id) {
-		Resource<Classroom> resource = classroomProxy.findClassroom(id);
+		Resource<Classroom> resource = pedagogyProxy.findClassroom(id);
 		return resource;
 	}
 	
 	@GetMapping("/classrooms")
 	public @ResponseBody Iterable<Classroom> getAllClassrooms() {
-		List<Classroom> classrooms = classroomProxy.getAllClassrooms();
+		List<Classroom> classrooms = pedagogyProxy.getAllClassrooms();
 
 		return classrooms;
 	}
@@ -142,9 +122,9 @@ public class PedagogyController {
 	/********************************************************************************************************************/
 	
 
-	@PostMapping(value = "/course")
+	@PostMapping(value = "/courses")
 	ResponseEntity<Course> addCourse(@RequestBody Course course) {
-		Course resource = courseProxy.addCourse(course);
+		Course resource = pedagogyProxy.addCourse(course);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -153,9 +133,9 @@ public class PedagogyController {
 
 	}
 	
-	@PostMapping(value = "/department")
+	@PostMapping(value = "/departments")
 	ResponseEntity<Department> addDepartment(@RequestBody Department department) {
-		Department resource = departmentProxy.addDepartment(department);
+		Department resource = pedagogyProxy.addDepartment(department);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -164,9 +144,9 @@ public class PedagogyController {
 
 	}
 	
-	@PostMapping(value = "/level")
+	@PostMapping(value = "/levels")
 	ResponseEntity<Level> addLevel(@RequestBody Level level) {
-		Level resource = levelProxy.addLevel(level);
+		Level resource = pedagogyProxy.addLevel(level);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -175,9 +155,9 @@ public class PedagogyController {
 
 	}
 	
-	@PostMapping(value = "/speciality")
+	@PostMapping(value = "/specialities")
 	ResponseEntity<Speciality> addSpeciality(@RequestBody Speciality speciality) {
-		Speciality resource = specialityProxy.addSpeciality(speciality);
+		Speciality resource = pedagogyProxy.addSpeciality(speciality);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -186,9 +166,9 @@ public class PedagogyController {
 
 	}
 	
-	@PostMapping(value = "/classroom")
+	@PostMapping(value = "/classrooms")
 	ResponseEntity<Classroom> addClassroom(@RequestBody Classroom classroom) {
-		Classroom resource = classroomProxy.addClassroom(classroom);
+		Classroom resource = pedagogyProxy.addClassroom(classroom);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -201,9 +181,9 @@ public class PedagogyController {
 	/****************************************************** UPDATE ******************************************************/
 	/********************************************************************************************************************/
 	
-	@PutMapping(value = "/department")
+	@PutMapping(value = "/departments")
 	ResponseEntity<Department> updateDepartment(@RequestBody Department department) {
-		Department resource = departmentProxy.updateDepartment(department);
+		Department resource = pedagogyProxy.updateDepartment(department);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -212,9 +192,9 @@ public class PedagogyController {
 
 	}
 	
-	@PutMapping(value = "/level")
+	@PutMapping(value = "/levels")
 	ResponseEntity<Level> updateLevel(@RequestBody Level level) {
-		Level resource = levelProxy.updateLevel(level);
+		Level resource = pedagogyProxy.updateLevel(level);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -223,9 +203,9 @@ public class PedagogyController {
 
 	}
 	
-	@PutMapping(value = "/speciality")
+	@PutMapping(value = "/specialities")
 	ResponseEntity<Speciality> updateSpeciality(@RequestBody Speciality speciality) {
-		Speciality resource = specialityProxy.updateSpeciality(speciality);
+		Speciality resource = pedagogyProxy.updateSpeciality(speciality);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -234,9 +214,9 @@ public class PedagogyController {
 
 	}
 	
-	@PutMapping(value = "/course")
+	@PutMapping(value = "/courses")
 	ResponseEntity<Course> updateCourse(@RequestBody Course course) {
-		Course resource = courseProxy.updateCourse(course);
+		Course resource = pedagogyProxy.updateCourse(course);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();
@@ -245,9 +225,9 @@ public class PedagogyController {
 
 	}
 	
-	@PutMapping(value = "/classroom")
+	@PutMapping(value = "/classrooms")
 	ResponseEntity<Classroom> updateClassroom(@RequestBody Classroom classroom) {
-		Classroom resource = classroomProxy.updateClassroom(classroom);
+		Classroom resource = pedagogyProxy.updateClassroom(classroom);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();

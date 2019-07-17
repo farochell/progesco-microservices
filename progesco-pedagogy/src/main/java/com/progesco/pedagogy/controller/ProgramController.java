@@ -38,7 +38,7 @@ public class ProgramController {
 		return programService.getAllPrograms();
 	}
 	
-	@GetMapping("/program/{id}")
+	@GetMapping("/programs/{id}")
 	public Resource<Program> retrieveProgram(@PathVariable long id) {
 		Optional<Program> program = programService.findProgram(id);
 
@@ -54,7 +54,7 @@ public class ProgramController {
 		return resource;
 	}
 	
-	@PostMapping(value = "/program")
+	@PostMapping(value = "/programs")
 	public ResponseEntity<Program> addProgram(@RequestBody Program program) {
 		Program resource = programService.addProgram(program);
 

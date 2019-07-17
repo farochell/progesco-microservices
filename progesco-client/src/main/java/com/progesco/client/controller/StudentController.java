@@ -4,24 +4,23 @@
 package com.progesco.client.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 import com.progesco.client.bundles.student.beans.Student;
+import com.progesco.client.bundles.student.beans.StudentCollection;
 import com.progesco.client.bundles.student.proxies.StudentProxy;
-
 /**
  * @author emile
  *
@@ -33,14 +32,19 @@ public class StudentController {
 	@Autowired
 	private StudentProxy studentProxy;
 	
-	@GetMapping(value ="/students")
-	public @ResponseBody Iterable<Student> getAllStudents(){
-		List<Student> students = studentProxy.getAll();
+	@GetMapping(value ="/students/page/{page}")
+	public StudentCollection getAllStudents(@PathVariable("page") int page) {
 		
-		return students;
+		return studentProxy.getAllStudents(page);
 	}
 	
-	@PostMapping(value = "/student")
+	@GetMapping(value = "/students/{id}")
+	Resource<Student> getStudent(@PathVariable("id") long id) {
+		Resource<Student> resource = studentProxy.getStudent(id);
+		return resource;
+	}
+	
+	@PostMapping(value = "/students")
 	ResponseEntity<Student> addStudent(@RequestBody Student student) {
 		 Student resource = studentProxy.addStudent(student);
 		 

@@ -3,28 +3,40 @@
  */
 package com.progesco.pedagogy.model;
 
-
+import com.progesco.pedagogy.entity.Course;
 
 /**
  * @author emile
  *
  */
-public class CourseModel {
-	private Long id;
+public class CourseModel extends Course {
+	private long id;
 	private String label;
+	private long specialityId;
 	private String registrationNumber;
-	private Long  specialityId;
 	
+	/**
+	 * @return the registrationNumber
+	 */
+	public String getRegistrationNumber() {
+		return registrationNumber;
+	}
+	/**
+	 * @param registrationNumber the registrationNumber to set
+	 */
+	public void setRegistrationNumber(String registrationNumber) {
+		this.registrationNumber = registrationNumber;
+	}
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	/**
@@ -40,29 +52,16 @@ public class CourseModel {
 		this.label = label;
 	}
 	/**
-	 * @return the registrationNumber
-	 */
-	public String getRegistrationNumber() {
-		return registrationNumber;
-	}
-	/**
-	 * @param registrationNumber the registrationNumber to set
-	 */
-	public void setRegistrationNumber(String registrationNumber) {
-		this.registrationNumber = registrationNumber;
-	}
-	/**
 	 * @return the specialityId
 	 */
-	public Long getSpecialityId() {
+	public long getSpecialityId() {
 		return specialityId;
 	}
 	/**
 	 * @param specialityId the specialityId to set
 	 */
-	public void setSpecialityId(Long specialityId) {
+	public void setSpecialityId(long specialityId) {
 		this.specialityId = specialityId;
 	}
-	
 	
 }
