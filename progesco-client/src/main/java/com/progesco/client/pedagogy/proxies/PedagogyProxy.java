@@ -19,6 +19,7 @@ import com.progesco.client.pedagogy.beans.Course;
 import com.progesco.client.pedagogy.beans.Department;
 import com.progesco.client.pedagogy.beans.Level;
 import com.progesco.client.pedagogy.beans.Program;
+import com.progesco.client.pedagogy.beans.Session;
 import com.progesco.client.pedagogy.beans.Speciality;
 
 /**
@@ -120,5 +121,21 @@ public interface PedagogyProxy {
 	
 	@PutMapping(value = "/specialities")
 	Speciality updateSpeciality(@RequestBody Speciality speciality);
+	
+	/**
+	 * ***************************************** SESSION ********************************************
+	 */
+	
+	@GetMapping(value = "/sessions")
+	List<Session> getAllSessions();
+
+	@GetMapping(value = "/sessions/{id}")
+	Resource<Session> findSession(@PathVariable("id") long id);
+
+	@PostMapping(value = "/sessions")
+	Session addSession(@RequestBody Session session);
+	
+	@PutMapping(value = "/sessions")
+	Session updateSession(@RequestBody Session session);
 
 }

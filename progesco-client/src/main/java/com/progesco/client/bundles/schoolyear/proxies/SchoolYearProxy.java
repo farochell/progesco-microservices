@@ -25,16 +25,16 @@ public interface SchoolYearProxy {
 	@GetMapping(value = "/schoolyears")
 	List<SchoolYear> getAllSchoolyears();
 
-	@GetMapping(value = "/schoolyear/{id}")
+	@GetMapping(value = "/schoolyears/{id}")
 	Resource<SchoolYear> retrieveSchoolyear(@PathVariable("id") long id);
 	
-	@GetMapping(value = "/schoolyear/activeyear")
+	@GetMapping(value = "/schoolyears/activeyear")
 	SchoolYear retrieveActiveSchoolYear();
 
-	@PostMapping(value = "/schoolyear")
+	@PostMapping(value = "/schoolyears")
 	SchoolYear addSchoolyear(@RequestBody SchoolYear schoolYear);
 	
-	@PutMapping(value = "/schoolyear/status/{id}/{status}")
+	@PutMapping(value = "/schoolyears/status/{id}/{status}")
 	SchoolYear updateStatus(@PathVariable("id") long id, @PathVariable("status") Integer status);
 	
 }

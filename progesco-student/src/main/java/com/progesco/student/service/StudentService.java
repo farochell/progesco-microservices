@@ -138,12 +138,25 @@ public class StudentService {
 		String name = student.getFirstName().substring(0,2).toUpperCase();
 		String lname = student.getLastName().substring(0,2).toUpperCase();
 		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-		String date = DATE_FORMAT.format(student.getBirthDate());
-		String registration = "ET-" + name + lname + date + "-" + student.getId();
+		String date = DATE_FORMAT.format(student.getCreatedAt());
+		String registration = "ET-" + name + lname + "-" + date  + student.getId();
 		student.setRegistrationNumber(registration);
 		studentRepository.save(student);
 		
 		studentModel = buildStudentModel(student);
+		
+		return studentModel;
+	}
+	
+	/**
+	 * Update a record
+	 * @param studentModel
+	 * @return
+	 */
+	public StudentModel updateStudent(StudentModel studentModel) {
+		Student student = buildStudent(studentModel);		
+		studentRepository.save(student);
+        studentModel = buildStudentModel(student);
 		
 		return studentModel;
 	}

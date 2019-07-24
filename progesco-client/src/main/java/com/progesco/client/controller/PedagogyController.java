@@ -25,6 +25,7 @@ import com.progesco.client.pedagogy.beans.Course;
 import com.progesco.client.pedagogy.beans.Department;
 import com.progesco.client.pedagogy.beans.Level;
 import com.progesco.client.pedagogy.beans.Program;
+import com.progesco.client.pedagogy.beans.Session;
 import com.progesco.client.pedagogy.beans.Speciality;
 import com.progesco.client.pedagogy.proxies.PedagogyProxy;
 
@@ -117,6 +118,13 @@ public class PedagogyController {
 		return classrooms;
 	}
 	
+	@GetMapping("/sessions")
+	public @ResponseBody Iterable<Session> getAllSessions() {
+		List<Session> sessions = pedagogyProxy.getAllSessions();
+
+		return sessions;
+	}
+	
 	/********************************************************************************************************************/
 	/********************************************************* ADD ******************************************************/
 	/********************************************************************************************************************/
@@ -177,6 +185,17 @@ public class PedagogyController {
 
 	}
 	
+	@PostMapping(value = "/sessions")
+	ResponseEntity<Session> addSession(@RequestBody Session session) {
+		Session resource = pedagogyProxy.addSession(session);
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
+				.toUri();
+
+		return ResponseEntity.created(location).build();
+
+	}
+	
 	/********************************************************************************************************************/
 	/****************************************************** UPDATE ******************************************************/
 	/********************************************************************************************************************/
@@ -228,6 +247,17 @@ public class PedagogyController {
 	@PutMapping(value = "/classrooms")
 	ResponseEntity<Classroom> updateClassroom(@RequestBody Classroom classroom) {
 		Classroom resource = pedagogyProxy.updateClassroom(classroom);
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
+				.toUri();
+
+		return ResponseEntity.created(location).build();
+
+	}
+	
+	@PutMapping(value = "/sessions")
+	ResponseEntity<Session> updateSession(@RequestBody Session session) {
+		Session resource = pedagogyProxy.updateSession(session);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
 				.toUri();

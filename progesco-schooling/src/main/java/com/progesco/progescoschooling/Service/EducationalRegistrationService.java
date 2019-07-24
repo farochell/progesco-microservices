@@ -3,8 +3,11 @@
  */
 package com.progesco.progescoschooling.Service;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.progesco.progescoschooling.entity.EducationalRegistration;
+import com.progesco.progescoschooling.exception.EducationalRegistrationNotFoundException;
 import com.progesco.progescoschooling.model.EducationalRegistrationCollectionModel;
 import com.progesco.progescoschooling.model.EducationalRegistrationModel;
 import com.progesco.progescoschooling.repository.EducationalRegistrationRepository;
@@ -86,5 +90,69 @@ public class EducationalRegistrationService {
 		educationalRegistrationCollectionModel.setEducationalRegistrationModels(educationalRegistrationModels);
 		
 		return educationalRegistrationCollectionModel;
+	}
+	
+	/**
+	 * Add new record
+	 * @param educationalRegistrationModel
+	 * @return
+	 */
+	public EducationalRegistrationModel addEducationalRegistration(EducationalRegistrationModel educationalRegistrationModel) {
+		EducationalRegistration educationalRegistration = buildEducationalRegistration(educationalRegistrationModel);
+		educationalRegistrationRepository.save(educationalRegistration);
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHH:mm:ss");
+		String date = DATE_FORMAT.format(System.currentTimeMillis());
+		String registration =  date + "-" + educationalRegistration.getId();
+		educationalRegistration.setRegistrationNumber(registration);
+		educationalRegistrationRepository.save(educationalRegistration);
+		
+		educationalRegistrationModel = buildEducationalRegistrationModel(educationalRegistration);
+		
+		return educationalRegistrationModel;
+	}
+	
+	/**
+	 * Update a record
+	 * @param educationalRegistrationModel
+	 * @return
+	 */
+	public EducationalRegistrationModel updateEducationalRegistration(EducationalRegistrationModel educationalRegistrationModel) {
+		EducationalRegistration educationalRegistration = buildEducationalRegistration(educationalRegistrationModel);
+		educationalRegistrationRepository.save(educationalRegistration);
+		
+		educationalRegistrationModel = buildEducationalRegistrationModel(educationalRegistration);
+		return educationalRegistrationModel;		
+	}
+	
+	/**
+	 * Find a educationalRegistration by given ID
+	 * @param id
+	 * @return
+	 */
+	public EducationalRegistrationModel retrieveEducationalRegistration(Long id) {
+		Optional<EducationalRegistration> educationalRegistration = educationalRegistrationRepository.findById(id);
+		EducationalRegistrationModel educationalRegistrationModel = new EducationalRegistrationModel();
+		if (!educationalRegistration.isPresent()) {
+			throw new EducationalRegistrationNotFoundException("Id not found: " + id);
+		}
+		educationalRegistrationModel = buildEducationalRegistrationModel(educationalRegistration.get());
+		
+		return educationalRegistrationModel;
+	}
+	
+	/**
+	 * Return all educational registration of the student ID given
+	 * @param studentId
+	 * @return
+	 */
+	public List<EducationalRegistrationModel> getStudentEducationalRegistrations(Long studentId) {
+		List<EducationalRegistrationModel> educationalRegistrationModels = new ArrayList<>();
+		List<EducationalRegistration> educationalRegistrations = educationalRegistrationRepository.findByStudent(studentId);
+		if(!educationalRegistrations.isEmpty()) {
+			for(EducationalRegistration educationalRegistration: educationalRegistrations) {
+				educationalRegistrationModels.add(buildEducationalRegistrationModel(educationalRegistration));
+			}
+		}
+		return educationalRegistrationModels;
 	}
 }
