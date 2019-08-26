@@ -28,13 +28,13 @@ public class Classroom {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 	
-	@Column(name="label", nullable=false, length=50)
+	@Column(name="label", nullable=false, length=255)
 	private String label;
 	
-	@ManyToOne (cascade=CascadeType.ALL)
+	@ManyToOne
 	private Department department;
 	
-	@ManyToOne (cascade=CascadeType.ALL)
+	@ManyToOne
 	private Level level;
 
 	/**

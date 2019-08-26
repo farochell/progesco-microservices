@@ -7,6 +7,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progesco.pedagogy.entity.Classroom;
 import com.progesco.pedagogy.model.ClassroomModel;
 import com.progesco.pedagogy.service.ClassroomService;
 
@@ -38,28 +40,28 @@ public class ClassroomController {
 	}
 	
 	@GetMapping("/classrooms/{id}")
-	public Resource<ClassroomModel> retrieveClassroom(@PathVariable long id) {
-		ClassroomModel course = classroomService.findClassroom(id);
+	public Resource<Classroom> retrieveClassroom(@PathVariable long id) {
+		Optional<Classroom> classroom = classroomService.findClassroom(id);
 
-		Resource<ClassroomModel> resource = new Resource<ClassroomModel>(course);
+		Resource<Classroom> resource = new Resource<Classroom>(classroom.get());
 
 		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllClassrooms());
 
-		resource.add(linkTo.withRel("all-courses"));
+		resource.add(linkTo.withRel("all-classrooms"));
 
 		return resource;
 	}
 	
 	@PostMapping(value = "/classrooms")
-	public ResponseEntity<ClassroomModel> addClassroom(@RequestBody ClassroomModel courseModel) {
-		ClassroomModel resource = classroomService.addClassroom(courseModel);
+	public ResponseEntity<ClassroomModel> addClassroom(@RequestBody ClassroomModel classroomModel) {
+		ClassroomModel resource = classroomService.addClassroom(classroomModel);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/classrooms")
-	public ResponseEntity<ClassroomModel> updateClassroom(@RequestBody ClassroomModel courseModel) {
-		ClassroomModel resource = classroomService.updateClassroom(courseModel);
+	public ResponseEntity<ClassroomModel> updateClassroom(@RequestBody ClassroomModel classroomModel) {
+		ClassroomModel resource = classroomService.updateClassroom(classroomModel);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

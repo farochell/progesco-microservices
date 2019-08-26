@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progesco.pedagogy.entity.Course;
-import com.progesco.pedagogy.entity.Speciality;
 import com.progesco.pedagogy.exception.CourseNotFoundException;
 import com.progesco.pedagogy.model.CourseModel;
 import com.progesco.pedagogy.repository.CourseRepository;
@@ -26,11 +25,8 @@ public class CourseService {
 	@Autowired
 	private CourseRepository courseRepository;
 	
-	@Autowired
-	private SpecialityService specialityService;
-	
 	/**
-	 * Fonction permettant de construire l'objet courseModel
+	 * This function allows to build Course model
 	 * @param course
 	 * @return
 	 */
@@ -39,7 +35,6 @@ public class CourseService {
 		courseModel.setId(course.getId());
 		courseModel.setLabel(course.getLabel());
 		courseModel.setRegistrationNumber(course.getRegistrationNumber());
-		courseModel.setSpecialityId(course.getSpeciality().getId());
 		
 		return courseModel;
 	}
@@ -63,11 +58,9 @@ public class CourseService {
 	 * @param courseModel
 	 */
 	public CourseModel addCourse(CourseModel courseModel) {
-		Optional<Speciality> speciality = specialityService.findSpeciality(courseModel.getSpecialityId());
 		Course course = new Course();
 		course.setLabel(courseModel.getLabel());
 		course.setRegistrationNumber(courseModel.getRegistrationNumber());
-		course.setSpeciality(speciality.get());
 		courseRepository.save(course);
 		
 		courseModel.setId(course.getId());
@@ -80,14 +73,14 @@ public class CourseService {
 	 * @param id
 	 * @return
 	 */
-	public CourseModel findCourse(Long id) {
+	public Optional<Course> findCourse(Long id) {
 		Optional<Course> course = courseRepository.findById(id);
 		
 		if(!course.isPresent()) {
 			throw new CourseNotFoundException("Enregistrement non trouvé. ID:" + id);
 		}
 		
-		return  buildCourseModel(course.get());
+		return  course;
 	}
 	
 	/**
@@ -96,12 +89,10 @@ public class CourseService {
 	 * @return
 	 */
 	public CourseModel updateCourse(CourseModel courseModel) {
-		Optional<Speciality> speciality = specialityService.findSpeciality(courseModel.getSpecialityId());
 		Course course = new Course();
 		course.setId(courseModel.getId());
 		course.setLabel(courseModel.getLabel());
 		course.setRegistrationNumber(courseModel.getRegistrationNumber());
-		course.setSpeciality(speciality.get());
 		
 		courseRepository.save(course);
 		

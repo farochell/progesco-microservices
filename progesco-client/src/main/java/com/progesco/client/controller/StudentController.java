@@ -40,7 +40,8 @@ public class StudentController {
 	
 	@GetMapping(value = "/students/{id}")
 	Resource<Student> getStudent(@PathVariable("id") long id) {
-		Resource<Student> resource = studentProxy.getStudent(id);
+		Resource<Student> resource = studentProxy.retrieveStudent(id);
+		
 		return resource;
 	}
 	

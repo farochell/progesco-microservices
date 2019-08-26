@@ -55,15 +55,13 @@ public class EducationalRegistrationService {
 	 * @return
 	 */
 	public EducationalRegistration buildEducationalRegistration(EducationalRegistrationModel educationalRegistrationModel) {
-		EducationalRegistration educationalRegistration = new EducationalRegistration();
-		
+		EducationalRegistration educationalRegistration = new EducationalRegistration();		
 		educationalRegistration.setClassroom(educationalRegistrationModel.getClassroom());
 		educationalRegistration.setId(educationalRegistrationModel.getId());
 		educationalRegistration.setRegistrationNumber(educationalRegistrationModel.getRegistrationNumber());
 		educationalRegistration.setSchoolYear(educationalRegistrationModel.getSchoolYear());
 		educationalRegistration.setSession(educationalRegistrationModel.getSession());
-		educationalRegistration.setStatus(educationalRegistrationModel.getStatus());
-		
+		educationalRegistration.setStudent(educationalRegistrationModel.getStudent());
 		return educationalRegistration;
 	}
 	
@@ -82,8 +80,7 @@ public class EducationalRegistrationService {
         }
 		List<EducationalRegistrationModel> educationalRegistrationModels = new ArrayList<>();
 		
-		for(EducationalRegistration student: educationalRegistrations.getContent()) {
-			
+		for(EducationalRegistration student: educationalRegistrations.getContent()) {			
 			educationalRegistrationModels.add(buildEducationalRegistrationModel(student));
 		}
 		
@@ -100,7 +97,7 @@ public class EducationalRegistrationService {
 	public EducationalRegistrationModel addEducationalRegistration(EducationalRegistrationModel educationalRegistrationModel) {
 		EducationalRegistration educationalRegistration = buildEducationalRegistration(educationalRegistrationModel);
 		educationalRegistrationRepository.save(educationalRegistration);
-		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHH:mm:ss");
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
 		String date = DATE_FORMAT.format(System.currentTimeMillis());
 		String registration =  date + "-" + educationalRegistration.getId();
 		educationalRegistration.setRegistrationNumber(registration);
@@ -154,5 +151,24 @@ public class EducationalRegistrationService {
 			}
 		}
 		return educationalRegistrationModels;
+	}
+	
+	public EducationalRegistrationCollectionModel getEducationalRegistrationsByStatus(Pageable pageable, Integer status) {
+		EducationalRegistrationCollectionModel educationalRegistrationCollectionModel = new EducationalRegistrationCollectionModel();
+		List<EducationalRegistration> educationalRegistrationByStatus = educationalRegistrationRepository.findByStatus(status, pageable);		
+		int totalPages = educationalRegistrationByStatus.size();
+		if(totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
+            educationalRegistrationCollectionModel.setTotalItems(pageNumbers);
+        }
+		List<EducationalRegistrationModel> educationalRegistrationModels = new ArrayList<>();
+		
+		for(EducationalRegistration student: educationalRegistrationByStatus) {			
+			educationalRegistrationModels.add(buildEducationalRegistrationModel(student));
+		}
+		
+		educationalRegistrationCollectionModel.setEducationalRegistrationModels(educationalRegistrationModels);
+		
+		return educationalRegistrationCollectionModel;
 	}
 }

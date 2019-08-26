@@ -36,6 +36,13 @@ public class EducationalRegistrationController {
 		return educationalRegistrationService.getAllEducationalRegistrations(pageable);
 	}
 	
+	@GetMapping(value = "/educationalregistrations/page/{page}/status/{status}")
+	public EducationalRegistrationCollectionModel getEducationalRegistrationsByStatus(@PathVariable("page") int page, @PathVariable("status") int status) {
+        PageRequest pageable = PageRequest.of(page - 1, 15);
+		
+		return educationalRegistrationService.getEducationalRegistrationsByStatus(pageable, status);
+	}
+	
 	@GetMapping("/educationalregistrations/{id}")
 	public EducationalRegistrationModel retrieveEducationalRegistration(@PathVariable long id) {
 		return educationalRegistrationService.retrieveEducationalRegistration(id);
@@ -43,7 +50,6 @@ public class EducationalRegistrationController {
 	
 	@GetMapping("/educationalregistrations/student/{id}/registrations")
 	public List<EducationalRegistrationModel> getStudentEducationalRegistrations(@PathVariable long id) {
-		System.out.println("ID: " + id);
 		return educationalRegistrationService.getStudentEducationalRegistrations(id);
 	}
 	

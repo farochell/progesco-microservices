@@ -37,6 +37,7 @@ public class StudentService {
 	 */
 	private StudentModel buildStudentModel(Student student) {
 		StudentModel studentModel = new StudentModel();
+		
 		studentModel.setId(student.getId());
 		studentModel.setAddress(student.getAddress());
 		studentModel.setBirthDate(student.getBirthDate());

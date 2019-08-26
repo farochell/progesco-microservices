@@ -31,8 +31,6 @@ public class Course {
 	@Column(name="registration_number", nullable=false, length=50, unique = true)
 	private String registrationNumber;
 	
-	@ManyToOne (cascade=CascadeType.ALL)	
-	private Speciality speciality;
 
 	/**
 	 * @return the id
@@ -75,21 +73,7 @@ public class Course {
 	public void setRegistrationNumber(String registrationNumber) {
 		this.registrationNumber = registrationNumber;
 	}
-
-	/**
-	 * @return the speciality
-	 */
-	public Speciality getSpeciality() {
-		return speciality;
-	}
-
-	/**
-	 * @param speciality the speciality to set
-	 */
-	public void setSpeciality(Speciality speciality) {
-		this.speciality = speciality;
-	}
-
+	
 	@Override
 	public String toString() {
 		return this.label;

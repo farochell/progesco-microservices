@@ -4,12 +4,12 @@
 package com.progesco.client.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +23,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.progesco.client.pedagogy.beans.Classroom;
 import com.progesco.client.pedagogy.beans.Course;
 import com.progesco.client.pedagogy.beans.Department;
+import com.progesco.client.pedagogy.beans.Group;
+import com.progesco.client.pedagogy.beans.GroupCollection;
 import com.progesco.client.pedagogy.beans.Level;
 import com.progesco.client.pedagogy.beans.Program;
 import com.progesco.client.pedagogy.beans.Session;
@@ -42,87 +44,77 @@ public class PedagogyController {
 
 	@GetMapping("/courses")
 	public @ResponseBody Iterable<Course> getCourses() {
-		List<Course> courses = pedagogyProxy.getAllCourses();
-
-		return courses;
+		return pedagogyProxy.getAllCourses();
 	}
 	
 	@GetMapping("/departments")
 	public @ResponseBody Iterable<Department> getDepartments() {
-		List<Department> departments = pedagogyProxy.getAllDepartments();
-
-		return departments;
+		return pedagogyProxy.getAllDepartments();
 	}
 	
 	@GetMapping("/levels")
 	public @ResponseBody Iterable<Level> getLevels() {
-		List<Level> levels = pedagogyProxy.getAllLevels();
-
-		return levels;
+		return pedagogyProxy.getAllLevels();
 	}
 	
 	@GetMapping("/programs")
 	public @ResponseBody Iterable<Program> getPrograms() {
-		List<Program> programs = pedagogyProxy.getAllPrograms();
-
-		return programs;
+		return pedagogyProxy.getAllPrograms();
 	}
 	
 	@GetMapping("/specialities")
 	public @ResponseBody Iterable<Speciality> getSpecialities() {
-		List<Speciality> specialities = pedagogyProxy.getAllSpecialities();
-
-		return specialities;
+		return pedagogyProxy.getAllSpecialities();
 	}
 
 	@GetMapping(value = "/courses/{id}")
 	Resource<Course> retrieveCourse(@PathVariable("id") long id) {
-		Resource<Course> resource = pedagogyProxy.findCourse(id);
-		return resource;
+		return pedagogyProxy.findCourse(id);
 	}
 	
 	@GetMapping(value = "/departments/{id}")
 	Resource<Department> retrieveDepartment(@PathVariable("id") long id) {
-		Resource<Department> resource = pedagogyProxy.findDepartment(id);
-		return resource;
+		return pedagogyProxy.findDepartment(id);
 	}
 	
 	@GetMapping(value = "/levels/{id}")
 	Resource<Level> retrieveLevel(@PathVariable("id") long id) {
-		Resource<Level> resource = pedagogyProxy.findLevel(id);
-		return resource;
+		return pedagogyProxy.findLevel(id);
 	}
 	
 	@GetMapping(value = "/programs/{id}")
 	Resource<Program> retrieveProgram(@PathVariable("id") long id) {
-		Resource<Program> resource = pedagogyProxy.findProgram(id);
-		return resource;
+		return pedagogyProxy.findProgram(id);
 	}
 	
 	@GetMapping(value = "/specialities/{id}")
 	Resource<Speciality> retrieveSpeciality(@PathVariable("id") long id) {
-		Resource<Speciality> resource = pedagogyProxy.findSpeciality(id);
-		return resource;
+		return pedagogyProxy.findSpeciality(id);
 	}
 	
 	@GetMapping(value = "/classrooms/{id}")
 	Resource<Classroom> retrieveClassroom(@PathVariable("id") long id) {
-		Resource<Classroom> resource = pedagogyProxy.findClassroom(id);
-		return resource;
+		return pedagogyProxy.findClassroom(id);
 	}
 	
 	@GetMapping("/classrooms")
 	public @ResponseBody Iterable<Classroom> getAllClassrooms() {
-		List<Classroom> classrooms = pedagogyProxy.getAllClassrooms();
-
-		return classrooms;
+		return pedagogyProxy.getAllClassrooms();
 	}
 	
 	@GetMapping("/sessions")
 	public @ResponseBody Iterable<Session> getAllSessions() {
-		List<Session> sessions = pedagogyProxy.getAllSessions();
-
-		return sessions;
+        return  pedagogyProxy.getAllSessions();
+	}
+	
+	@GetMapping(value = "/groups/page/{page}")
+	public GroupCollection getAllGroups(@PathVariable("page") int page) {
+		return pedagogyProxy.getAllGroups(page);
+	}
+	
+	@GetMapping(value = "/groups/{id}")
+	public Resource<Group> findGroup(@PathVariable("id") long id) {
+		return pedagogyProxy.findGroup(id);
 	}
 	
 	/********************************************************************************************************************/
@@ -196,6 +188,16 @@ public class PedagogyController {
 
 	}
 	
+	@PostMapping(value = "/groups")
+	ResponseEntity<Group> addGroup(@RequestBody Group group) {
+		Group resource = pedagogyProxy.addGroup(group);
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
+				.toUri();
+
+		return ResponseEntity.created(location).build();
+	}
+	
 	/********************************************************************************************************************/
 	/****************************************************** UPDATE ******************************************************/
 	/********************************************************************************************************************/
@@ -264,5 +266,25 @@ public class PedagogyController {
 
 		return ResponseEntity.created(location).build();
 
+	}
+	
+	@PutMapping(value = "/groups")
+	ResponseEntity<Group> updateGroup(@RequestBody Group group) {
+		Group resource = pedagogyProxy.updateGroup(group);
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(resource.getId())
+				.toUri();
+
+		return ResponseEntity.created(location).build();
+
+	}
+	
+	/********************************************************************************************************************/
+	/****************************************************** DELETE ******************************************************/
+	/********************************************************************************************************************/
+	
+	@DeleteMapping(value = "/groups/{id}") 
+	public void deleteGroup(@PathVariable("id") long id) {
+		pedagogyProxy.deleteGroup(id);
 	}
 }

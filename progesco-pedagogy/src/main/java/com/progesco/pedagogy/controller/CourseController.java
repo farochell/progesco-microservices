@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progesco.pedagogy.entity.Course;
 import com.progesco.pedagogy.model.CourseModel;
 import com.progesco.pedagogy.service.CourseService;
 
@@ -31,10 +33,10 @@ public class CourseController {
 	}
 	
 	@GetMapping("/courses/{id}")
-	public Resource<CourseModel> retrieveCourse(@PathVariable long id) {
-		CourseModel course = courseService.findCourse(id);
+	public Resource<Course> retrieveCourse(@PathVariable long id) {
+		Optional<Course> course = courseService.findCourse(id);
 
-		Resource<CourseModel> resource = new Resource<CourseModel>(course);
+		Resource<Course> resource = new Resource<Course>(course.get());
 
 		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllCourses());
 

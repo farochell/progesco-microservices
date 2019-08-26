@@ -25,7 +25,7 @@ public interface StudentProxy {
 	StudentCollection getAllStudents(@PathVariable("page") int page);
 	
 	@GetMapping(value = "/students/{id}")
-	Resource<Student> getStudent(@PathVariable("id") long id);
+	Resource<Student> retrieveStudent(@PathVariable("id") long id);
 	
 	@PostMapping(value = "/students")
 	Student addStudent(@RequestBody Student student);

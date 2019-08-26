@@ -3,23 +3,36 @@
  */
 package com.progesco.progescoschooling.entity;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author emile.camara
  *
  */
 @Entity
-@Table(name = "educational_registration")
+@Table(name = "educational_registration",
+	    uniqueConstraints=
+	        @UniqueConstraint(columnNames={"schoolyear_id", "student_id"})
+	)
+@EntityListeners(AuditingEntityListener.class)
 public class EducationalRegistration {
+	public static final Integer STATUS_INIT   = 1;
+	public static final Integer STATUS_VALID  = 2;
+	public static final Integer STATUS_REPORT = 3;
+	public static final Integer STATUS_ABD    = 4;
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -40,15 +53,15 @@ public class EducationalRegistration {
 	private String registrationNumber;
 	
 	@CreatedDate
-	@Column(name="created_at", nullable=false, columnDefinition="DATETIME")
-	private java.sql.Date createdAt;
+	@Column(name="created_at", nullable=true)
+	private Date createdAt;
 	
-	@Column(name="status", nullable=false)
+	@Column(name="status", nullable=true)
 	private Integer status;
 	
 	@LastModifiedDate
-	@Column(name="updated_at", nullable=true, columnDefinition="DATETIME")
-	private java.sql.Date updatedAt;
+	@Column(name="updated_at", nullable=true)
+	private Date updatedAt;
 
 	/**
 	 * @return the id
@@ -137,14 +150,14 @@ public class EducationalRegistration {
 	/**
 	 * @return the createdAt
 	 */
-	public java.sql.Date getCreatedAt() {
+	public Date getCreatedAt() {
 		return createdAt;
 	}
 
 	/**
 	 * @param createdAt the createdAt to set
 	 */
-	public void setCreatedAt(java.sql.Date createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -165,16 +178,22 @@ public class EducationalRegistration {
 	/**
 	 * @return the updatedAt
 	 */
-	public java.sql.Date getUpdatedAt() {
+	public Date getUpdatedAt() {
 		return updatedAt;
 	}
 
 	/**
 	 * @param updatedAt the updatedAt to set
 	 */
-	public void setUpdatedAt(java.sql.Date updatedAt) {
+	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	
+	/**
+	 * Default constructor
+	 */
+	public EducationalRegistration() {
+		this.status = EducationalRegistration.STATUS_INIT;
+	}
 	
 }

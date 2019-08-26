@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.hateoas.Resource;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,8 @@ import com.progesco.client.constant.Constant;
 import com.progesco.client.pedagogy.beans.Classroom;
 import com.progesco.client.pedagogy.beans.Course;
 import com.progesco.client.pedagogy.beans.Department;
+import com.progesco.client.pedagogy.beans.Group;
+import com.progesco.client.pedagogy.beans.GroupCollection;
 import com.progesco.client.pedagogy.beans.Level;
 import com.progesco.client.pedagogy.beans.Program;
 import com.progesco.client.pedagogy.beans.Session;
@@ -137,5 +140,24 @@ public interface PedagogyProxy {
 	
 	@PutMapping(value = "/sessions")
 	Session updateSession(@RequestBody Session session);
+	
+	/**
+	 * ******************************************** GROUP *********************************************
+	 */
+	
+	@GetMapping(value = "/groups/page/{page}")
+	GroupCollection getAllGroups(@PathVariable("page") int page);
+
+	@GetMapping(value = "/groups/{id}")
+	Resource<Group> findGroup(@PathVariable("id") long id);
+
+	@PostMapping(value = "/groups")
+	Group addGroup(@RequestBody Group group);
+	
+	@PutMapping(value = "/groups")
+	Group updateGroup(@RequestBody Group group);
+	
+	@DeleteMapping(value = "/groups/{id}")
+	void deleteGroup(@PathVariable("id") long id);
 
 }

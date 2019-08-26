@@ -70,7 +70,7 @@ public class ClassroomService {
 		Optional<Department> department = departmentService.findDepartment(classroomModel.getDepartmentId());
 		Optional<Level> level = levelService.findLevel(classroomModel.getLevelId());
 		Classroom classroom = new Classroom();
-		classroom.setLabel(classroomModel.getLabel());
+		classroom.setLabel(level.get().getLabel() + " - " + department.get().getLabel());
 		classroom.setLevel(level.get());
 		classroom.setDepartment(department.get());
 		
@@ -86,14 +86,14 @@ public class ClassroomService {
 	 * @param id
 	 * @return
 	 */
-	public ClassroomModel findClassroom(Long id) {
+	public Optional<Classroom> findClassroom(Long id) {
 		Optional<Classroom> classroom = classroomRepository.findById(id);
 		
 		if(!classroom.isPresent()) {
 			throw new ClassroomNotFoundException("Enregistrement non trouvé. ID:" + id);
 		}
 		
-		return  buildClassroomModel(classroom.get());
+		return classroom;
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class ClassroomService {
 		Optional<Level> level = levelService.findLevel(classroomModel.getLevelId());
 		Optional<Classroom> classroom = classroomRepository.findById(classroomModel.getId());
 		classroom.get().setId(classroomModel.getId());
-		classroom.get().setLabel(classroomModel.getLabel());
+		classroom.get().setLabel(level.get().getLabel() + " - " + department.get().getLabel() );
 		classroom.get().setDepartment(department.get());
 		classroom.get().setLevel(level.get());
 		

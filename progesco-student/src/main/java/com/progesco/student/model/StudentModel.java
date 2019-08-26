@@ -10,7 +10,6 @@ import com.progesco.student.entity.Student;
  *
  */
 
-public class StudentModel extends Student {
-	
+public class StudentModel extends Student {	
 	
 }
