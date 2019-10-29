@@ -5,6 +5,7 @@ package com.progesco.client.bundles.schoolyear.proxies;
 
 import java.util.List;
 
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.progesco.client.bundles.schoolyear.beans.SchoolYear;
-import com.progesco.client.constant.Constant;
 
 /**
  * @author emile
  *
  */
-@FeignClient(name = "progesco-schoolyear", url = Constant.URL_SCHOOLYEAR)
+@FeignClient(name = "progesco-zuul")
+@RibbonClient(name = "progesco-schoolyear")
 public interface SchoolYearProxy {
 	@GetMapping(value = "/schoolyears")
 	List<SchoolYear> getAllSchoolyears();

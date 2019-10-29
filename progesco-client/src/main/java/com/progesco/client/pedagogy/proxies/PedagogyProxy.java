@@ -5,6 +5,7 @@ package com.progesco.client.pedagogy.proxies;
 
 import java.util.List;
 
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.progesco.client.constant.Constant;
 import com.progesco.client.pedagogy.beans.Classroom;
 import com.progesco.client.pedagogy.beans.Course;
 import com.progesco.client.pedagogy.beans.Department;
@@ -29,13 +29,13 @@ import com.progesco.client.pedagogy.beans.Speciality;
  * @author emile.camara
  *
  */
-@FeignClient(name = "progesco-pedagogy", url = Constant.URL_PEDAGOGY)
+@FeignClient(name = "progesco-zuul")
+@RibbonClient(name = "progesco-pedagogy")
 public interface PedagogyProxy {
 	
 	/**
 	 * ******************************************** CLASSROOM *********************************************
-	 */
-	
+	 */	
 	@GetMapping(value = "/classrooms")
 	List<Classroom> getAllClassrooms();
 

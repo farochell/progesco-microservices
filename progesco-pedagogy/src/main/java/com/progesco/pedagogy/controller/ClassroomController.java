@@ -31,9 +31,12 @@ import com.progesco.pedagogy.service.ClassroomService;
  */
 @RestController
 public class ClassroomController {
-	@Autowired
-	private ClassroomService classroomService;
-	
+	private final ClassroomService classroomService;
+
+	public ClassroomController(ClassroomService classroomService) {
+		this.classroomService = classroomService;
+	}
+
 	@GetMapping(value = "/classrooms")
 	public List<ClassroomModel> getAllClassrooms() {
 		return classroomService.getAllClassrooms();

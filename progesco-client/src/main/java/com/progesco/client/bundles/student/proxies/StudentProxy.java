@@ -3,6 +3,7 @@
  */
 package com.progesco.client.bundles.student.proxies;
 
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.progesco.client.bundles.student.beans.Student;
 import com.progesco.client.bundles.student.beans.StudentCollection;
-import com.progesco.client.constant.Constant;
 
 /**
  * @author emile
  *
  */
-@FeignClient(name = "progesco-student", url = Constant.URL_STUDENT)
+@FeignClient(name = "progesco-zuul")
+@RibbonClient(name = "progesco-student")
 public interface StudentProxy {
 	@GetMapping(value = "/students/page/{page}")
 	StudentCollection getAllStudents(@PathVariable("page") int page);

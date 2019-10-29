@@ -8,6 +8,7 @@
 		<version>2.1.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>com.progesco</groupId>
 	<artifactId>progesco-pedagogy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -15,9 +16,12 @@
 	<name>progesco-pedagogy</name>
 	<description>Progesco pedagogy microservice</description>
 
-	<properties>
-		<java.version>1.8</java.version>
-	</properties>
+	 <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -67,8 +71,35 @@
 			<artifactId>spring-restdocs-mockmvc</artifactId>
 			<scope>test</scope>
 		</dependency>
+		 <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+       </dependency>
+       <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+       </dependency>
 	</dependencies>
-
+    <dependencyManagement>
+  		<dependencies>
+  			<dependency>
+  				<groupId>org.springframework.cloud</groupId>
+  				<artifactId>spring-cloud-dependencies</artifactId>
+  				<version>${spring-cloud.version}</version>
+  				<type>pom</type>
+  				<scope>import</scope>
+  			</dependency>
+  		</dependencies>
+  	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -102,5 +133,14 @@
 			</plugin>
 		</plugins>
 	</build>
-
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

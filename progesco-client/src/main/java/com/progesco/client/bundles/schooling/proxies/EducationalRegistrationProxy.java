@@ -6,6 +6,7 @@ package com.progesco.client.bundles.schooling.proxies;
 
 import java.util.List;
 
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.progesco.client.bundles.schooling.beans.EducationalRegistration;
 import com.progesco.client.bundles.schooling.beans.EducationalRegistrationCollection;
-import com.progesco.client.constant.Constant;
 
 /**
  * @author emile.camara
  *
  */
-@FeignClient(name = "progesco-schooling", url = Constant.URL_SCHOOLING)
+@FeignClient(name = "progesco-zuul")
+@RibbonClient(name = "progesco-schooling")
 public interface EducationalRegistrationProxy {
 	@GetMapping(value = "/educationalregistrations/page/{page}")
 	EducationalRegistrationCollection getAllEducationalRegistrations(@PathVariable("page") int page);
