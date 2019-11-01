@@ -125,7 +125,7 @@ public class StudentService {
      * @return
      */
     public StudentCollectionModel getAllStudents(Pageable pageable, HttpServletRequest request) {
-		if (!hasRole(request, Constant.ROLE_ADMIN) || !hasRole(request, Constant.ROLE_PEDAGOGY_VIEW)) {
+		if (!hasRole(request, Constant.ROLE_ADMIN) && !hasRole(request, Constant.ROLE_PEDAGOGY_VIEW)) {
 			throw new StudentForbiddenException(Constant.ACCESS_FORBIDDEN);
 		}
         StudentCollectionModel studentCollectionModel = new StudentCollectionModel();
@@ -161,7 +161,6 @@ public class StudentService {
                 .getBody();
         String roles = (String) claims.get("scopes");
         tempArray = roles.split(",");
-
         return Arrays.asList(tempArray).contains(role);
     }
 
@@ -171,7 +170,7 @@ public class StudentService {
      * @return
      */
     public StudentModel addStudent(StudentModel studentModel, HttpServletRequest request) {
-		if (!hasRole(request, Constant.ROLE_ADMIN) || !hasRole(request, Constant.ROLE_PEDAGOGY_ADD)) {
+		if (!hasRole(request, Constant.ROLE_ADMIN) && !hasRole(request, Constant.ROLE_PEDAGOGY_ADD)) {
 			throw new StudentForbiddenException(Constant.ACCESS_FORBIDDEN);
 		}
         Student student = buildStudent(studentModel);
@@ -195,7 +194,7 @@ public class StudentService {
      * @return
      */
     public StudentModel updateStudent(StudentModel studentModel, HttpServletRequest request) {
-		if (!hasRole(request, Constant.ROLE_ADMIN) || !hasRole(request, Constant.ROLE_PEDAGOGY_UPD)) {
+		if (!hasRole(request, Constant.ROLE_ADMIN) && !hasRole(request, Constant.ROLE_PEDAGOGY_UPD)) {
 			throw new StudentForbiddenException(Constant.ACCESS_FORBIDDEN);
 		}
         Student student = buildStudent(studentModel);
@@ -211,7 +210,7 @@ public class StudentService {
      * @return
      */
     public StudentModel retrieveStudent(Long id, HttpServletRequest request) {
-		if (!hasRole(request, Constant.ROLE_ADMIN) || !hasRole(request, Constant.ROLE_PEDAGOGY_VIEW)) {
+		if (!hasRole(request, Constant.ROLE_ADMIN) && !hasRole(request, Constant.ROLE_PEDAGOGY_VIEW)) {
 			throw new StudentForbiddenException(Constant.ACCESS_FORBIDDEN);
 		}
         Optional<Student> student = studentRepository.findById(id);

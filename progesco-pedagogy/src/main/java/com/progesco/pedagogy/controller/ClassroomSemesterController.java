@@ -25,6 +25,8 @@ import com.progesco.pedagogy.entity.ClassroomSemester;
 import com.progesco.pedagogy.model.ClassroomSemesterModel;
 import com.progesco.pedagogy.service.ClassroomSemesterService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile.camara
  *
@@ -35,22 +37,22 @@ public class ClassroomSemesterController {
 	private ClassroomSemesterService classroomSemesterService;
 	
 	@GetMapping("/classroomsemesters")
-	public List<ClassroomSemesterModel> getAllClassroomSemesters() {
-		return classroomSemesterService.getAllClassroomSemesters();
+	public List<ClassroomSemesterModel> getAllClassroomSemesters(HttpServletRequest request) {
+		return classroomSemesterService.getAllClassroomSemesters(request);
 	}
 	
 	@GetMapping("/classroomsemesters/classroom/{id}")
-	public List<ClassroomSemesterModel> getAllClassroomSemestersByClassroom(@PathVariable long id) {
-		return classroomSemesterService.getAllClassroomSemestersByClassroom(id);
+	public List<ClassroomSemesterModel> getAllClassroomSemestersByClassroom(@PathVariable long id, HttpServletRequest request) {
+		return classroomSemesterService.getAllClassroomSemestersByClassroom(id, request);
 	}
 	
 	@GetMapping("/classroomsemesters/{id}")
-	public Resource<ClassroomSemester> retrieveClassroomSemester(@PathVariable long id) {
+	public Resource<ClassroomSemester> retrieveClassroomSemester(@PathVariable long id, HttpServletRequest request) {
 		Optional<ClassroomSemester> classroomsemester = classroomSemesterService.findClassroomSemester(id);
 
 		Resource<ClassroomSemester> resource = new Resource<ClassroomSemester>(classroomsemester.get());
 
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllClassroomSemesters());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllClassroomSemesters(request));
 
 		resource.add(linkTo.withRel("all-classroomsemesters"));
 
@@ -58,15 +60,15 @@ public class ClassroomSemesterController {
 	}
 	
 	@PostMapping(value = "/classroomsemesters")
-	public ResponseEntity<ClassroomSemesterModel> addClassroomSemester(@RequestBody ClassroomSemesterModel classroomSemesterModel) {
-		ClassroomSemesterModel resource = classroomSemesterService.addClassroomSemester(classroomSemesterModel);
+	public ResponseEntity<ClassroomSemesterModel> addClassroomSemester(@RequestBody ClassroomSemesterModel classroomSemesterModel, HttpServletRequest request) {
+		ClassroomSemesterModel resource = classroomSemesterService.addClassroomSemester(classroomSemesterModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/classroomsemesters")
-	public ResponseEntity<ClassroomSemesterModel> updateClassroomSemester(@RequestBody ClassroomSemesterModel classroomSemesterModel) {
-		ClassroomSemesterModel resource = classroomSemesterService.updateClassroomSemester(classroomSemesterModel);
+	public ResponseEntity<ClassroomSemesterModel> updateClassroomSemester(@RequestBody ClassroomSemesterModel classroomSemesterModel, HttpServletRequest request) {
+		ClassroomSemesterModel resource = classroomSemesterService.updateClassroomSemester(classroomSemesterModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

@@ -24,6 +24,8 @@ import com.progesco.pedagogy.entity.ClassroomSemesterCourse;
 import com.progesco.pedagogy.model.ClassroomSemesterCourseModel;
 import com.progesco.pedagogy.service.ClassroomSemesterCourseService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile.camara
  *
@@ -34,27 +36,26 @@ public class ClassroomSemesterCourseController {
 	private ClassroomSemesterCourseService classroomSemesterCourseService;
 	
 	@GetMapping("/classroomsemestercourses")
-	public List<ClassroomSemesterCourseModel> getAllClassroomSemesterCourses() {
-		return classroomSemesterCourseService.getAllClassroomSemesterCourses();
+	public List<ClassroomSemesterCourseModel> getAllClassroomSemesterCourses(HttpServletRequest request) {
+		return classroomSemesterCourseService.getAllClassroomSemesterCourses(request);
 	}
 	
 	@GetMapping("/classroomsemestercourses/course/{id}")
-	public List<ClassroomSemesterCourseModel> getAllClassroomSemesterCoursesByCourse(@PathVariable long id) {
-		return classroomSemesterCourseService.getAllClassroomSemesterCoursesByCourse(id);
+	public List<ClassroomSemesterCourseModel> getAllClassroomSemesterCoursesByCourse(@PathVariable long id, HttpServletRequest request) {
+		return classroomSemesterCourseService.getAllClassroomSemesterCoursesByCourse(id, request);
 	}
 	
 	@GetMapping("/classroomsemestercourses/classroomsemester/{id}")
-	public List<ClassroomSemesterCourseModel> getAllClassroomSemesterCoursesByClassroomSemester(@PathVariable long id) {
-		return classroomSemesterCourseService.getAllClassroomSemesterCoursesByClassroomSemester(id);
+	public List<ClassroomSemesterCourseModel> getAllClassroomSemesterCoursesByClassroomSemester(@PathVariable long id, HttpServletRequest request) {
+		return classroomSemesterCourseService.getAllClassroomSemesterCoursesByClassroomSemester(id, request);
 	}
 	
 	@GetMapping("/classroomsemestercourses/{id}")
-	public Resource<ClassroomSemesterCourse> retrieveCourse(@PathVariable long id) {
-		Optional<ClassroomSemesterCourse> course = classroomSemesterCourseService.findClassroomSemesterCourse(id);
+	public Resource<ClassroomSemesterCourse> retrieveCourse(@PathVariable long id, HttpServletRequest request) {
+		ClassroomSemesterCourse course = classroomSemesterCourseService.retrieveCourse(id, request);
+		Resource<ClassroomSemesterCourse> resource = new Resource<ClassroomSemesterCourse>(course);
 
-		Resource<ClassroomSemesterCourse> resource = new Resource<ClassroomSemesterCourse>(course.get());
-
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllClassroomSemesterCourses());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllClassroomSemesterCourses(request));
 
 		resource.add(linkTo.withRel("all-classroomsemestercourses"));
 
@@ -62,15 +63,15 @@ public class ClassroomSemesterCourseController {
 	}
 	
 	@PostMapping(value = "/classroomsemestercourses")
-	public ResponseEntity<ClassroomSemesterCourseModel> addClassroom(@RequestBody ClassroomSemesterCourseModel classroomSemesterCourseModel) {
-		ClassroomSemesterCourseModel resource = classroomSemesterCourseService.addClassroomSemesterCourse(classroomSemesterCourseModel);
+	public ResponseEntity<ClassroomSemesterCourseModel> addClassroom(@RequestBody ClassroomSemesterCourseModel classroomSemesterCourseModel, HttpServletRequest request) {
+		ClassroomSemesterCourseModel resource = classroomSemesterCourseService.addClassroomSemesterCourse(classroomSemesterCourseModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/classroomsemestercourses")
-	public ResponseEntity<ClassroomSemesterCourseModel> updateClassroomSemesterCourse(@RequestBody ClassroomSemesterCourseModel classroomSemesterCourseModel) {
-		ClassroomSemesterCourseModel resource = classroomSemesterCourseService.updateClassroomSemesterCourse(classroomSemesterCourseModel);
+	public ResponseEntity<ClassroomSemesterCourseModel> updateClassroomSemesterCourse(@RequestBody ClassroomSemesterCourseModel classroomSemesterCourseModel, HttpServletRequest request) {
+		ClassroomSemesterCourseModel resource = classroomSemesterCourseService.updateClassroomSemesterCourse(classroomSemesterCourseModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

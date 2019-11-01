@@ -25,6 +25,8 @@ import com.progesco.pedagogy.entity.Classroom;
 import com.progesco.pedagogy.model.ClassroomModel;
 import com.progesco.pedagogy.service.ClassroomService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile
  *
@@ -38,17 +40,17 @@ public class ClassroomController {
 	}
 
 	@GetMapping(value = "/classrooms")
-	public List<ClassroomModel> getAllClassrooms() {
-		return classroomService.getAllClassrooms();
+	public List<ClassroomModel> getAllClassrooms(HttpServletRequest request) {
+		return classroomService.getAllClassrooms(request);
 	}
 	
 	@GetMapping("/classrooms/{id}")
-	public Resource<Classroom> retrieveClassroom(@PathVariable long id) {
+	public Resource<Classroom> retrieveClassroom(@PathVariable long id, HttpServletRequest request) {
 		Optional<Classroom> classroom = classroomService.findClassroom(id);
 
 		Resource<Classroom> resource = new Resource<Classroom>(classroom.get());
 
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllClassrooms());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllClassrooms(request));
 
 		resource.add(linkTo.withRel("all-classrooms"));
 
@@ -56,15 +58,15 @@ public class ClassroomController {
 	}
 	
 	@PostMapping(value = "/classrooms")
-	public ResponseEntity<ClassroomModel> addClassroom(@RequestBody ClassroomModel classroomModel) {
-		ClassroomModel resource = classroomService.addClassroom(classroomModel);
+	public ResponseEntity<ClassroomModel> addClassroom(@RequestBody ClassroomModel classroomModel, HttpServletRequest request) {
+		ClassroomModel resource = classroomService.addClassroom(classroomModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/classrooms")
-	public ResponseEntity<ClassroomModel> updateClassroom(@RequestBody ClassroomModel classroomModel) {
-		ClassroomModel resource = classroomService.updateClassroom(classroomModel);
+	public ResponseEntity<ClassroomModel> updateClassroom(@RequestBody ClassroomModel classroomModel, HttpServletRequest request) {
+		ClassroomModel resource = classroomService.updateClassroom(classroomModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

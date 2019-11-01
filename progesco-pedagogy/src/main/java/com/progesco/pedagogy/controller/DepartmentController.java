@@ -25,6 +25,8 @@ import com.progesco.pedagogy.entity.Department;
 import com.progesco.pedagogy.exception.DepartmentNotFoundException;
 import com.progesco.pedagogy.service.DepartmentService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile
  *
@@ -35,20 +37,17 @@ public class DepartmentController {
 	private DepartmentService departmentService;
 	
 	@GetMapping(value = "/departments")
-	public List<Department> getAllDepartments() {
-		return departmentService.getAllDepartments();
+	public List<Department> getAllDepartments(HttpServletRequest request) {
+		return departmentService.getAllDepartments(request);
 	}
 	
 	@GetMapping("/departments/{id}")
-	public Resource<Department> retrieveSchoolyear(@PathVariable long id) {
-		Optional<Department> department = departmentService.findDepartment(id);
+	public Resource<Department> retrieveDepartment(@PathVariable long id, HttpServletRequest request) {
+		Department department = departmentService.retrieveDepartment(id, request);
 
-		if (!department.isPresent())
-			throw new DepartmentNotFoundException("id-" + id);
+		Resource<Department> resource = new Resource<Department>(department);
 
-		Resource<Department> resource = new Resource<Department>(department.get());
-
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllDepartments());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllDepartments(request));
 
 		resource.add(linkTo.withRel("all-departments"));
 
@@ -56,15 +55,15 @@ public class DepartmentController {
 	}
 	
 	@PostMapping(value = "/departments")
-	public ResponseEntity<Department> addDepartment(@RequestBody Department department) {
-		Department resource = departmentService.addDepartment(department);
+	public ResponseEntity<Department> addDepartment(@RequestBody Department department, HttpServletRequest request) {
+		Department resource = departmentService.addDepartment(department, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/departments")
-	public ResponseEntity<Department> updateDepartment(@RequestBody Department department) {
-		Department resource = departmentService.updateDepartment(department);
+	public ResponseEntity<Department> updateDepartment(@RequestBody Department department, HttpServletRequest request) {
+		Department resource = departmentService.updateDepartment(department, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

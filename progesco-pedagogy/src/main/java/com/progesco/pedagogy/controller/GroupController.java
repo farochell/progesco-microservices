@@ -26,6 +26,8 @@ import com.progesco.pedagogy.model.GroupModel;
 import com.progesco.pedagogy.model.GroupModelCollection;
 import com.progesco.pedagogy.service.GroupService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile.camara
  *
@@ -36,19 +38,19 @@ public class GroupController {
 	private GroupService groupService;
 	
 	@GetMapping(value = "/groups/page/{page}")
-	public GroupModelCollection getAllGroups(@PathVariable("page") int page) {
+	public GroupModelCollection getAllGroups(@PathVariable("page") int page, HttpServletRequest request) {
 		PageRequest pageable = PageRequest.of(page - 1, 15);
 		
-		return groupService.getAllGroups(pageable);
+		return groupService.getAllGroups(pageable, request);
 	}
 	
 	@GetMapping("/groups/{id}")
-	public Resource<GroupModel> retrieveGroup(@PathVariable long id) {
-		GroupModel group = groupService.retrieveGroup(id);
+	public Resource<GroupModel> retrieveGroup(@PathVariable long id, HttpServletRequest request) {
+		GroupModel group = groupService.retrieveGroup(id, request);
 
 		Resource<GroupModel> resource = new Resource<GroupModel>(group);
 
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllGroups(1));
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllGroups(1, request));
 
 		resource.add(linkTo.withRel("all-groups"));
 
@@ -56,28 +58,28 @@ public class GroupController {
 	}
 	
 	@GetMapping("/groups/classroom/{id}")
-	public List<GroupModel> getGroupByClassroom(@PathVariable long id) {
-		List<GroupModel> groups = groupService.getGroupByClassroom(id);
+	public List<GroupModel> getGroupByClassroom(@PathVariable long id, HttpServletRequest request) {
+		List<GroupModel> groups = groupService.getGroupByClassroom(id, request);
 
 		return groups;
 	}
 	
 	@PostMapping(value = "/groups")
-	public ResponseEntity<GroupModel> addGroup(@RequestBody GroupModel groupModel) {
-		GroupModel resource = groupService.addGroup(groupModel);
+	public ResponseEntity<GroupModel> addGroup(@RequestBody GroupModel groupModel, HttpServletRequest request) {
+		GroupModel resource = groupService.addGroup(groupModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/groups")
-	public ResponseEntity<GroupModel> updateCourse(@RequestBody GroupModel groupModel) {
-		GroupModel resource = groupService.updateGroup(groupModel);
+	public ResponseEntity<GroupModel> updateCourse(@RequestBody GroupModel groupModel, HttpServletRequest request) {
+		GroupModel resource = groupService.updateGroup(groupModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@DeleteMapping(value = "/groups/{id}")
-	public void deleteGroup(@PathVariable Long id) {
-		groupService.deleteGroup(id);
+	public void deleteGroup(@PathVariable Long id, HttpServletRequest request) {
+		groupService.deleteGroup(id, request);
 	}
 }

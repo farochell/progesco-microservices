@@ -25,6 +25,8 @@ import com.progesco.pedagogy.entity.Level;
 import com.progesco.pedagogy.exception.LevelNotFoundException;
 import com.progesco.pedagogy.service.LevelService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile
  *
@@ -35,20 +37,17 @@ public class LevelController {
 	private LevelService levelService;
 	
 	@GetMapping(value = "/levels")
-	public List<Level> getAllLevels() {
-		return levelService.getAllLevels();
+	public List<Level> getAllLevels(HttpServletRequest request) {
+		return levelService.getAllLevels(request);
 	}
 	
 	@GetMapping("/levels/{id}")
-	public Resource<Level> retrieveSchoolyear(@PathVariable long id) {
-		Optional<Level> level = levelService.findLevel(id);
+	public Resource<Level> retrieveLevel(@PathVariable long id, HttpServletRequest request) {
+		Level level = levelService.retrieveLevel(id, request);
 
-		if (!level.isPresent())
-			throw new LevelNotFoundException("id-" + id);
+		Resource<Level> resource = new Resource<Level>(level);
 
-		Resource<Level> resource = new Resource<Level>(level.get());
-
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllLevels());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllLevels(request));
 
 		resource.add(linkTo.withRel("all-levels"));
 
@@ -56,16 +55,16 @@ public class LevelController {
 	}
 	
 	@PostMapping(value = "/levels")
-	public ResponseEntity<Level> addLevel(@RequestBody Level level) {
-		Level resource = levelService.addLevel(level);
+	public ResponseEntity<Level> addLevel(@RequestBody Level level, HttpServletRequest request) {
+		Level resource = levelService.addLevel(level, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	
 	@PutMapping(value = "/levels")
-	public ResponseEntity<Level> updateLevel(@RequestBody Level level) {
-		Level resource = levelService.updateLevel(level);
+	public ResponseEntity<Level> updateLevel(@RequestBody Level level, HttpServletRequest request) {
+		Level resource = levelService.updateLevel(level, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.progesco.pedagogy.exception.ClassroomForbiddenException;
+import com.progesco.pedagogy.utils.Constant;
+import com.progesco.pedagogy.utils.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.progesco.pedagogy.entity.Classroom;
@@ -16,6 +20,8 @@ import com.progesco.pedagogy.entity.Department;
 import com.progesco.pedagogy.exception.ClassroomNotFoundException;
 import com.progesco.pedagogy.model.ClassroomModel;
 import com.progesco.pedagogy.repository.ClassroomRepository;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author emile
@@ -32,6 +38,10 @@ public class ClassroomService {
 	
 	@Autowired
 	private LevelService levelService;
+
+	@Value("${app.jwtSecret}")
+	private String jwtSecret;
+
 	
 	/**
 	 * Fonction permettant de construire l'objet classroomModel
@@ -47,12 +57,16 @@ public class ClassroomService {
 		
 		return classroomModel;
 	}
-	
+
 	/**
 	 * This function allows to get all classrooms
+	 * @param request
 	 * @return
 	 */
-	public List<ClassroomModel> getAllClassrooms(){
+	public List<ClassroomModel> getAllClassrooms(HttpServletRequest request){
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_CLASSROOM_VIEW, this.jwtSecret)) {
+			throw new ClassroomForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		List<Classroom> classrooms = classroomRepository.findAll();
 		List<ClassroomModel> classroomModels = new ArrayList<>();
 		for(Classroom classroom: classrooms) {
@@ -65,8 +79,12 @@ public class ClassroomService {
 	/**
 	 * Add a new classroom
 	 * @param classroomModel
+	 * @param request
 	 */
-	public ClassroomModel addClassroom(ClassroomModel classroomModel) {
+	public ClassroomModel addClassroom(ClassroomModel classroomModel, HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_CLASSROOM_ADD, this.jwtSecret)) {
+			throw new ClassroomForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		Optional<Department> department = departmentService.findDepartment(classroomModel.getDepartmentId());
 		Optional<Level> level = levelService.findLevel(classroomModel.getLevelId());
 		Classroom classroom = new Classroom();
@@ -95,13 +113,17 @@ public class ClassroomService {
 		
 		return classroom;
 	}
-	
+
 	/**
 	 * Update a classroom record
 	 * @param classroomModel
+	 * @param request
 	 * @return
 	 */
-	public ClassroomModel updateClassroom(ClassroomModel classroomModel) {
+	public ClassroomModel updateClassroom(ClassroomModel classroomModel, HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_CLASSROOM_UPD, this.jwtSecret)) {
+			throw new ClassroomForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		Optional<Department> department = departmentService.findDepartment(classroomModel.getDepartmentId());
 		Optional<Level> level = levelService.findLevel(classroomModel.getLevelId());
 		Optional<Classroom> classroom = classroomRepository.findById(classroomModel.getId());

@@ -1,4 +1,9 @@
 package com.progesco.progescozuul.entity;
 
-public class RoleName {
+/**
+ * List of all roles
+ */
+public enum  RoleName {
+    ROLE_USER,
+    ROLE_ADMIN
 }

@@ -25,6 +25,8 @@ import com.progesco.pedagogy.entity.Speciality;
 import com.progesco.pedagogy.exception.SpecialityNotFoundException;
 import com.progesco.pedagogy.service.SpecialityService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile
  *
@@ -35,20 +37,17 @@ public class SpecialityController {
 	private SpecialityService specialityService;
 	
 	@GetMapping(value = "/specialities")
-	public List<Speciality> getAllSpecialities() {
-		return specialityService.getAllSpecialities();
+	public List<Speciality> getAllSpecialities(HttpServletRequest request) {
+		return specialityService.getAllSpecialities(request);
 	}
 	
 	@GetMapping("/specialities/{id}")
-	public Resource<Speciality> retrieveSpeciality(@PathVariable long id) {
-		Optional<Speciality> speciality = specialityService.findSpeciality(id);
+	public Resource<Speciality> retrieveSpeciality(@PathVariable long id, HttpServletRequest request) {
+		Speciality speciality = specialityService.retrieveSpeciality(id, request);
 
-		if (!speciality.isPresent())
-			throw new SpecialityNotFoundException("id-" + id);
+		Resource<Speciality> resource = new Resource<Speciality>(speciality);
 
-		Resource<Speciality> resource = new Resource<Speciality>(speciality.get());
-
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllSpecialities());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllSpecialities(request));
 
 		resource.add(linkTo.withRel("all-specialities"));
 
@@ -56,15 +55,15 @@ public class SpecialityController {
 	}
 	
 	@PostMapping(value = "/specialities")
-	public ResponseEntity<Speciality> addSpeciality(@RequestBody Speciality speciality) {
-		Speciality resource = specialityService.addSpeciality(speciality);
+	public ResponseEntity<Speciality> addSpeciality(@RequestBody Speciality speciality, HttpServletRequest request) {
+		Speciality resource = specialityService.addSpeciality(speciality, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/specialities")
-	public ResponseEntity<Speciality> updateSpeciality(@RequestBody Speciality speciality) {
-		Speciality resource = specialityService.updateSpeciality(speciality);
+	public ResponseEntity<Speciality> updateSpeciality(@RequestBody Speciality speciality, HttpServletRequest request) {
+		Speciality resource = specialityService.updateSpeciality(speciality, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

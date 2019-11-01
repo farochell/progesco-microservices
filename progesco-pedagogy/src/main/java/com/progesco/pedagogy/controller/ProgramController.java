@@ -24,6 +24,8 @@ import com.progesco.pedagogy.entity.Program;
 import com.progesco.pedagogy.exception.ProgramNotFoundException;
 import com.progesco.pedagogy.service.ProgramService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile
  *
@@ -34,20 +36,17 @@ public class ProgramController {
 	private ProgramService programService;
 	
 	@GetMapping(value = "/programs")
-	public List<Program> getAllPrograms() {
-		return programService.getAllPrograms();
+	public List<Program> getAllPrograms(HttpServletRequest request) {
+		return programService.getAllPrograms(request);
 	}
 	
 	@GetMapping("/programs/{id}")
-	public Resource<Program> retrieveProgram(@PathVariable long id) {
-		Optional<Program> program = programService.findProgram(id);
+	public Resource<Program> retrieveProgram(@PathVariable long id, HttpServletRequest request) {
+        Program program = programService.retrieveProgram(id, request);
 
-		if (!program.isPresent())
-			throw new ProgramNotFoundException("id-" + id);
+		Resource<Program> resource = new Resource<Program>(program);
 
-		Resource<Program> resource = new Resource<Program>(program.get());
-
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllPrograms());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllPrograms(request));
 
 		resource.add(linkTo.withRel("all-programs"));
 
@@ -55,8 +54,8 @@ public class ProgramController {
 	}
 	
 	@PostMapping(value = "/programs")
-	public ResponseEntity<Program> addProgram(@RequestBody Program program) {
-		Program resource = programService.addProgram(program);
+	public ResponseEntity<Program> addProgram(@RequestBody Program program, HttpServletRequest request) {
+		Program resource = programService.addProgram(program, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

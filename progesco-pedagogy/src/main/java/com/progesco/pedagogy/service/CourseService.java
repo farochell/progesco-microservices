@@ -7,13 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.progesco.pedagogy.exception.CourseForbiddenException;
+import com.progesco.pedagogy.utils.Constant;
+import com.progesco.pedagogy.utils.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.progesco.pedagogy.entity.Course;
 import com.progesco.pedagogy.exception.CourseNotFoundException;
 import com.progesco.pedagogy.model.CourseModel;
 import com.progesco.pedagogy.repository.CourseRepository;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author emile
@@ -24,6 +30,9 @@ public class CourseService {
 
 	@Autowired
 	private CourseRepository courseRepository;
+
+	@Value("${app.jwtSecret}")
+	private String jwtSecret;
 	
 	/**
 	 * This function allows to build Course model
@@ -38,12 +47,16 @@ public class CourseService {
 		
 		return courseModel;
 	}
-	
+
 	/**
 	 * Return all courses
+	 * @param request
 	 * @return
 	 */
-	public List<CourseModel> getAllCourses() {
+	public List<CourseModel> getAllCourses(HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_COURSE_VIEW, this.jwtSecret)) {
+			throw new CourseForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		List<Course> courses = courseRepository.findAll();
 		List<CourseModel> courseModels = new ArrayList<>();
 		for (Course course: courses) {			
@@ -52,12 +65,17 @@ public class CourseService {
 		
 		return courseModels;
 	}
-	
+
 	/**
 	 * Add a new course
 	 * @param courseModel
+	 * @param request
+	 * @return
 	 */
-	public CourseModel addCourse(CourseModel courseModel) {
+	public CourseModel addCourse(CourseModel courseModel, HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_COURSE_ADD, this.jwtSecret)) {
+			throw new CourseForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		Course course = new Course();
 		course.setLabel(courseModel.getLabel());
 		course.setRegistrationNumber(courseModel.getRegistrationNumber());
@@ -88,7 +106,10 @@ public class CourseService {
 	 * @param courseModel
 	 * @return
 	 */
-	public CourseModel updateCourse(CourseModel courseModel) {
+	public CourseModel updateCourse(CourseModel courseModel, HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_COURSE_UPD, this.jwtSecret)) {
+			throw new CourseForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		Course course = new Course();
 		course.setId(courseModel.getId());
 		course.setLabel(courseModel.getLabel());

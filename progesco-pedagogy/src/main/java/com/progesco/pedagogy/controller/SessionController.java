@@ -25,6 +25,8 @@ import com.progesco.pedagogy.entity.Session;
 import com.progesco.pedagogy.exception.SessionNotFoundException;
 import com.progesco.pedagogy.service.SessionService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author emile.camara
  *
@@ -35,20 +37,17 @@ public class SessionController {
 	private SessionService sessionService;
 	
 	@GetMapping(value = "/sessions")
-	public List<Session> getAllSessions() {
-		return sessionService.getAllSessions();
+	public List<Session> getAllSessions(HttpServletRequest request) {
+		return sessionService.getAllSessions(request);
 	}
 	
 	@GetMapping("/sessions/{id}")
-	public Resource<Session> retrieveSession(@PathVariable long id) {
-		Optional<Session> session = sessionService.findSession(id);
+	public Resource<Session> retrieveSession(@PathVariable long id, HttpServletRequest request) {
+		Session session = sessionService.retrieveSession(id, request);
 
-		if (!session.isPresent())
-			throw new SessionNotFoundException("id-" + id);
+		Resource<Session> resource = new Resource<Session>(session);
 
-		Resource<Session> resource = new Resource<Session>(session.get());
-
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllSessions());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllSessions(request));
 
 		resource.add(linkTo.withRel("all-sessions"));
 
@@ -56,15 +55,15 @@ public class SessionController {
 	}
 	
 	@PostMapping(value = "/sessions")
-	public ResponseEntity<Session> addSession(@RequestBody Session session) {
-		Session resource = sessionService.addSession(session);
+	public ResponseEntity<Session> addSession(@RequestBody Session session, HttpServletRequest request) {
+		Session resource = sessionService.addSession(session, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/sessions")
-	public ResponseEntity<Session> updateSession(@RequestBody Session session) {
-		Session resource = sessionService.updateSession(session);
+	public ResponseEntity<Session> updateSession(@RequestBody Session session, HttpServletRequest request) {
+		Session resource = sessionService.updateSession(session, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}

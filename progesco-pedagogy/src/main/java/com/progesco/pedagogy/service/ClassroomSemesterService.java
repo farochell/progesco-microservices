@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.progesco.pedagogy.exception.ClassroomSemesterForbiddenException;
+import com.progesco.pedagogy.utils.Constant;
+import com.progesco.pedagogy.utils.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.progesco.pedagogy.entity.Classroom;
@@ -15,6 +19,8 @@ import com.progesco.pedagogy.entity.ClassroomSemester;
 import com.progesco.pedagogy.entity.Speciality;
 import com.progesco.pedagogy.model.ClassroomSemesterModel;
 import com.progesco.pedagogy.repository.ClassroomSemesterRepository;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author emile.camara
@@ -30,6 +36,9 @@ public class ClassroomSemesterService {
 
 	@Autowired
 	private SpecialityService specialityService;
+
+	@Value("${app.jwtSecret}")
+	private String jwtSecret;
 
 	/**
 	 * Allow to build a Classroom model
@@ -72,9 +81,13 @@ public class ClassroomSemesterService {
 	
 	/**
 	 * Return all classroomSemesters
+	 * @param request
 	 * @return
 	 */
-	public List<ClassroomSemesterModel> getAllClassroomSemesters() {
+	public List<ClassroomSemesterModel> getAllClassroomSemesters(HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_CLASSROOM_SEMESTER_VIEW, this.jwtSecret)) {
+			throw new ClassroomSemesterForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		List<ClassroomSemesterModel> classroomSemesterModels = new ArrayList<>();
 		
 		List<ClassroomSemester> classroomSemesters = classroomSemesterRepository.findAll();
@@ -88,9 +101,13 @@ public class ClassroomSemesterService {
 	/**
 	 * Return all semesters of given classroom ID
 	 * @param id
+	 * @param request
 	 * @return
 	 */
-	public List<ClassroomSemesterModel> getAllClassroomSemestersByClassroom(Long id) {
+	public List<ClassroomSemesterModel> getAllClassroomSemestersByClassroom(Long id, HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_CLASSROOM_SEMESTER_VIEW, this.jwtSecret)) {
+			throw new ClassroomSemesterForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		List<ClassroomSemesterModel> classroomSemesterModels = new ArrayList<>();
 		Optional<Classroom> classroom = classroomService.findClassroom(id);
 		List<ClassroomSemester> classroomSemesters = classroomSemesterRepository.findByClassroom(classroom.get());
@@ -104,9 +121,13 @@ public class ClassroomSemesterService {
 	/**
 	 * Allow to add a new ClassroomSemester
 	 * @param classroomSemesterModel
+	 * @param request
 	 * @return
 	 */
-	public ClassroomSemesterModel addClassroomSemester(ClassroomSemesterModel classroomSemesterModel) {
+	public ClassroomSemesterModel addClassroomSemester(ClassroomSemesterModel classroomSemesterModel, HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_CLASSROOM_SEMESTER_ADD, this.jwtSecret)) {
+			throw new ClassroomSemesterForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		ClassroomSemester classroomSemester = buildClassroomSemester(classroomSemesterModel);
 
 		classroomSemesterRepository.save(classroomSemester);
@@ -119,9 +140,13 @@ public class ClassroomSemesterService {
 	/**
 	 * Allow to update a ClassroomSemester entity
 	 * @param classroomSemesterModel
+	 * @param request
 	 * @return
 	 */
-	public ClassroomSemesterModel updateClassroomSemester(ClassroomSemesterModel classroomSemesterModel) {
+	public ClassroomSemesterModel updateClassroomSemester(ClassroomSemesterModel classroomSemesterModel, HttpServletRequest request) {
+		if (!Helpers.hasRole(request, Constant.ROLE_ADMIN, this.jwtSecret) && !Helpers.hasRole(request, Constant.ROLE_CLASSROOM_SEMESTER_UPD, this.jwtSecret)) {
+			throw new ClassroomSemesterForbiddenException(Constant.ACCESS_FORBIDDEN);
+		}
 		ClassroomSemester classroomSemester = buildClassroomSemester(classroomSemesterModel);
 
 		classroomSemesterRepository.save(classroomSemester);

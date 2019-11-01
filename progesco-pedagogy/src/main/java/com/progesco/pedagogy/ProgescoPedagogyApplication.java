@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableConfigurationProperties
 @EnableDiscoveryClient
 public class ProgescoPedagogyApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ProgescoPedagogyApplication.class, args);
 	}

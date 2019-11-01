@@ -22,23 +22,25 @@ import com.progesco.pedagogy.entity.Course;
 import com.progesco.pedagogy.model.CourseModel;
 import com.progesco.pedagogy.service.CourseService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class CourseController {
 	@Autowired
 	private CourseService courseService;
 	
 	@GetMapping(value = "/courses")
-	public List<CourseModel> getAllCourses() {
-		return courseService.getAllCourses();
+	public List<CourseModel> getAllCourses(HttpServletRequest request) {
+		return courseService.getAllCourses(request);
 	}
 	
 	@GetMapping("/courses/{id}")
-	public Resource<Course> retrieveCourse(@PathVariable long id) {
+	public Resource<Course> retrieveCourse(@PathVariable long id, HttpServletRequest request) {
 		Optional<Course> course = courseService.findCourse(id);
 
 		Resource<Course> resource = new Resource<Course>(course.get());
 
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllCourses());
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getAllCourses(request));
 
 		resource.add(linkTo.withRel("all-courses"));
 
@@ -46,15 +48,15 @@ public class CourseController {
 	}
 	
 	@PostMapping(value = "/courses")
-	public ResponseEntity<CourseModel> addCourse(@RequestBody CourseModel courseModel) {
-		CourseModel resource = courseService.addCourse(courseModel);
+	public ResponseEntity<CourseModel> addCourse(@RequestBody CourseModel courseModel, HttpServletRequest request) {
+		CourseModel resource = courseService.addCourse(courseModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
 	
 	@PutMapping(value = "/courses")
-	public ResponseEntity<CourseModel> updateCourse(@RequestBody CourseModel courseModel) {
-		CourseModel resource = courseService.updateCourse(courseModel);
+	public ResponseEntity<CourseModel> updateCourse(@RequestBody CourseModel courseModel, HttpServletRequest request) {
+		CourseModel resource = courseService.updateCourse(courseModel, request);
 
 		return ResponseEntity.status(HttpStatus.OK).body(resource);
 	}
