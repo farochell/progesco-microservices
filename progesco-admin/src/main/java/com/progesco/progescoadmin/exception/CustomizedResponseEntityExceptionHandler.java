@@ -1,9 +1,8 @@
 /**
  *
  */
-package com.progesco.student.exception;
+package com.progesco.progescoadmin.exception;
 
-import java.util.Date;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.progesco.student.exception.ExceptionResponse;
-import com.progesco.student.exception.StudentNotFoundException;
+import java.util.Date;
 
 /**
  * @author emile
@@ -33,18 +31,16 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(StudentNotFoundException.class)
-    public final ResponseEntity<Object> handleStudentNotFoundException(StudentNotFoundException ex,
-                                                                       WebRequest request) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                                                                     request.getDescription(false));
 
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(StudentForbiddenException.class)
-    public final ResponseEntity<Object> handleStudentForbiddenException(StudentForbiddenException ex,
-                                                                        WebRequest request) {
+    @ExceptionHandler(UserForbiddenException.class)
+    public final ResponseEntity<Object> handleUserForbiddenException(UserForbiddenException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                                                                     request.getDescription(false));
 

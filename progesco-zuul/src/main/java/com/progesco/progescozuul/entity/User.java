@@ -42,6 +42,10 @@ public class User extends DateAudit {
     @Size(max = 100)
     private String password;
 
+    @NotBlank
+    @Size(max = 100)
+    private String type;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -105,5 +109,13 @@ public class User extends DateAudit {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
